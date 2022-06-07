@@ -18,23 +18,23 @@ public class TestA {
     public float gettest_attr3() {
         return test_attr3;
     }
-    public String gettest_attr4() {
-        return test_attr4;
-    }
-    public static int gettest_attr5() {
-        return test_attr5;
-    }
-    public String gettest_attr6() {
-        return test_attr6;
-    }
     public void settest_attr3(int test_attr3) {
         this.test_attr3 = test_attr3;
+    }
+    public String gettest_attr4() {
+        return test_attr4;
     }
     public void settest_attr4(String test_attr4) {
         this.test_attr4 = test_attr4;
     }
+    public static int gettest_attr5() {
+        return test_attr5;
+    }
     public static void settest_attr5(int test_attr5) {
         TestA.test_attr5 = test_attr5;
+    }
+    public String gettest_attr6() {
+        return test_attr6;
     }
     public static void settest_attr6(String test_attr6) {
         TestA.test_attr6 = test_attr6;
