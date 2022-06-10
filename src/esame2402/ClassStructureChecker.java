@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Checker per la struttura della classe
@@ -22,6 +23,7 @@ class ClassStructureChecker {
     static ClassStructureChecker create(final Class<?> clazz) {
         return new ClassStructureChecker(clazz);
     }
+
 
     public ClassStructureChecker shouldHaveEmptyConstructor(ValidationResults results) {
         results.addResults("CLASS: " + clazz.getName());
@@ -41,13 +43,10 @@ class ClassStructureChecker {
                 f -> !Modifier.isFinal(f.getModifiers()) && !Modifier.isStatic(f.getModifiers()));
         try {
             clazz.getDeclaredConstructor(params);
+            results.addResults("\t- a constructor with the right arguments types is declared");
         } catch (Exception e){
-            String s = "\t- there is no public construtor that inizializes the neither STATIC nor FINAL attributes\n\t\t argument types: [ ";
-            for(Class<?> p: params) {
-                s += p.getTypeName() + " ";
-            }
-            s += " ]";
-            results.addResults(s);
+            results.addResults("\t- there is no public construtor that inizializes the neither STATIC nor FINAL attributes\n\t\t argument types: [ " +
+                            Arrays.stream(params).map(Class:: getTypeName).collect(Collectors.joining(", ")) + " ]");
         }
         return this;
     }
@@ -58,31 +57,21 @@ class ClassStructureChecker {
         try {
             if (params.length != 0) {
                 clazz.getMethod("setStatic", params);
-                results.addResults("\t- setStatic is OK\n");
+                results.addResults("\t- setStatic is OK");
             }
         } catch (Exception e) {
-            String s = "\t- there is no setStatic method that inizializes all the STATIC but FINAL attributes\n\t\t argument types: [ ";
-            for(Class<?> p: params) {
-                s += p.getTypeName() + " ";
-            }
-            s += " ]";
-            results.addResults(s);
+            results.addResults("\t- there is no setStatic method that inizializes the neither STATIC nor FINAL attributes\n\t\t argument types: [ " +
+                    Arrays.stream(params).map(Class:: getTypeName).collect(Collectors.joining(", ")) + " ]");
         }
         return this;
     }
 
     private Class<?>[] filterFields(Field[] fields, Predicate<Field> condition) {
-        List<Class<?>> filteredFields = new ArrayList<>();
-        sortInAlphabeticallyOrder(fields);
-        for (Field f : fields) {
-            if (condition.test(f)) {
-                filteredFields.add(f.getType());
-            }
-        }
-        return filteredFields.toArray(new Class<?>[0]);
-    }
+        return Arrays.stream(fields)
+                .sorted(Comparator.comparing(Field::getName))
+                .filter(condition)
+                .map(Field::getType)
+                .toArray(size -> new Class<?>[size]);
 
-    private void sortInAlphabeticallyOrder(Field[] declaredFields) {
-        Arrays.sort(declaredFields, Comparator.comparing(Field::getName));
     }
 }

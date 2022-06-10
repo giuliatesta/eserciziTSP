@@ -40,7 +40,6 @@ public class GradeHandler {
             .shouldHaveEmptyConstructor(results)
             .shouldHaveAllArgumentsConstructor(results)
             .shouldHaveSetStatic(results);
-
         fieldsChecker
             .checkFields(results);
         return results;

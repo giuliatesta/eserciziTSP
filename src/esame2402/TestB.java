@@ -37,7 +37,7 @@ public class TestB {
         TestB.test_e = test_e;
     }
 
-    //public TestB() {}
+    public TestB() {}
     public TestB(int a2, String a3, char a4){}
 
     public static void setStatic(boolean a){}

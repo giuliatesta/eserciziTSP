@@ -3,6 +3,7 @@ package esame2402;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 /**
@@ -24,9 +25,12 @@ class FieldsChecker {
         for(Field f: clazz.getDeclaredFields()) {
             this
             .ifFieldIsFinalShouldBePublicAndStatic(f, results)
-            .ifFieldIsNotFinalShouldBePrivate(f, results)
-            .ifFieldNotFinalShouldHaveGetter(f, results)
-            .ifFieldNotFinalShouldHaveSetter(f, results);
+            .ifFieldIsNotFinalShouldBePrivate(f, results);
+            if(!f.getName().startsWith("test_const")) {
+                this
+                    .ifFieldNotFinalShouldHaveGetter(f, results)
+                    .ifFieldNotFinalShouldHaveSetter(f, results);
+            }
         }
         return this;
     }
