@@ -1,11 +1,13 @@
 package esame2402;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
+/*
+    Classe che contiene tutte le stringhe di validazione prodotte dai Checker
+ */
 class ValidationResults {
 
     private static final List<String> results = new ArrayList<>();

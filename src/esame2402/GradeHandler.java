@@ -1,7 +1,7 @@
 package esame2402;
 
 /*
-    Grader che riconosce dove la classe passata come argomento differisce dal comportamento standard
+    Grader che controlla dove la classe passata come argomento differisce dal comportamento standard
     ATTRIBUTI
     Se FINAL --> PUBLIC e STATIC
     Se non FINAL --> PRIVATE e deve avere GETTER e SETTER
@@ -13,7 +13,6 @@ package esame2402;
         - Se c'è un attributo STATIC --> public static void setStatic(<<argument list>>)
  */
 public class GradeHandler {
-
     private final ClassStructureChecker classStructureChecker;
     private final FieldsChecker fieldsChecker;
 
@@ -25,23 +24,25 @@ public class GradeHandler {
     public static void main(String[] args) {
         try {
             Class<?> theClazz = Class.forName(args[0]);
+            System.out.println("CLASS: " + theClazz.getSimpleName());
             GradeHandler gradeHandler = new GradeHandler(theClazz);
-            ValidationResults results = gradeHandler.check();
-            results.printResults();
+            gradeHandler.check();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private ValidationResults check() {
-        ValidationResults results = new ValidationResults();
-
+    /*
+        Chiama i metodi che controlla che la classe sia definita come previsto
+     */
+    private void check() {
         classStructureChecker
-            .shouldHaveEmptyConstructor(results)
-            .shouldHaveAllArgumentsConstructor(results)
-            .shouldHaveSetStatic(results);
+            .shouldHaveEmptyConstructor()
+            .shouldHaveAllArgumentsConstructor()
+            .shouldHaveSetStatic();
         fieldsChecker
-            .checkFields(results);
-        return results;
+             .checkNonFinalFieldsShouldBePrivateAndHaveGetterAndSetter()
+             .checkFinalFieldsShouldBePublicAndStatic()
+             .getResults().printResults();
     }
 }
